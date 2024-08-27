@@ -69,28 +69,51 @@ const slides = [
     },
 ];
 
-const currentSlide = ref<number>(3);
+const currentSlide = ref<number>(1);
 
 const nextSlide = () => {
-    if (currentSlide.value === slides.length) {
-        currentSlide.value = 1;
-    } else {
-        currentSlide.value = currentSlide.value + 1;
-    }
-
+    const currentIndex = currentSlide.value;
+    const nextIndex = currentIndex === slides.length ? 1 : currentIndex + 1;
+    animateSlideChange(nextIndex);
 };
 
 const prevSlide = () => {
-    if (currentSlide.value === 1) {
-        currentSlide.value = slides.length;
-    } else {
-        currentSlide.value = currentSlide.value - 1;
-    }
+    const currentIndex = currentSlide.value;
+    const prevIndex = currentIndex === 1 ? slides.length : currentIndex - 1;
+    animateSlideChange(prevIndex);
 };
 
 const selectSlide = (slideId: number) => {
     currentSlide.value = slideId
 }
+
+const animateSlideChange = (newSlideId: number) => {
+    const currentSlideElement = document.querySelector('.app-swiper__item_active');
+    const newSlideElement = document.querySelector(`.app-swiper__item:nth-child(${newSlideId})`);
+
+    if (currentSlideElement && newSlideElement) {
+        // currentSlideElement.classList.remove('app-swiper__item_active');
+        currentSlideElement.classList.add('app-swiper__item_animate-current');
+        newSlideElement.classList.add('app-swiper__item_animate-next');
+
+        currentSlideElement.classList.add('app-swiper__item_hide-current');
+        newSlideElement.classList.add('app-swiper__item_show-next');
+
+
+        setTimeout(() => {
+            currentSlideElement.classList.remove('app-swiper__item_active');
+            currentSlideElement.classList.remove('app-swiper__item_hide-current');
+            newSlideElement.classList.remove('app-swiper__item_show-next');
+            currentSlideElement.classList.remove('app-swiper__item_animate-current');
+            newSlideElement.classList.remove('app-swiper__item_animate-next');
+            newSlideElement.classList.add('app-swiper__item_active');
+            newSlideElement.classList.add('app-swiper__item_animate-slide-content');
+            setTimeout(() => {
+                currentSlide.value = newSlideId;
+            }, 800);
+        }, 1500); // Длительность анимации
+    }
+};
 </script>
 
 <template>
@@ -98,39 +121,44 @@ const selectSlide = (slideId: number) => {
         <div
                 v-for="slide in slides"
                 :key="slide.id"
-                :class="{ 'app-swiper__item_active': slide.id === currentSlide, 'app-swiper__item_inactive': slide.id !== currentSlide }"
+                :class="{ 'app-swiper__item_active': slide.id === currentSlide }"
                 class="app-swiper__item"
         >
             <div
                     :style="{ 'background-color': slide.bgcTop }"
-                    class="app-swiper__top-half"></div>
-
-            <div
-                    class="app-swiper__visual"
-            >
-                <component
-                        class="app-swiper__img"
-                        :is="slide.image"
-                        :style="{ 'fill': slide.imgColor }"
-                />
+                    class="app-swiper__top-half">
             </div>
 
-            <div class="app-swiper__content-wrapper">
-                <p class="app-swiper__title">{{ slide.title }}</p>
-                <p class="app-swiper__description">{{ slide.description }}</p>
-                <AppButton class="app-swiper__btn">View Project</AppButton>
+            <div class="app-swiper__item-wrapper">
+                <div
+                        class="app-swiper__visual"
+                >
+                    <component
+                            class="app-swiper__img"
+                            :is="slide.image"
+                            :style="{ 'fill': slide.imgColor }"
+                    />
+                </div>
+
+                <div class="app-swiper__content-wrapper">
+                    <p class="app-swiper__title">{{ slide.title }}</p>
+                    <p class="app-swiper__description">{{ slide.description }}</p>
+                    <AppButton class="app-swiper__btn">View Project</AppButton>
+                </div>
+
+                <ul class="app-swiper__info">
+                    <li
+                            v-for="item in slide.info"
+                            :key="item"
+                            class="app-swiper__info-item">{{ item }}
+                    </li>
+                </ul>
             </div>
 
             <div
                     :style="{ 'background-color': slide.bgcBottom }"
-                    class="app-swiper__bottom-half"></div>
-
-            <ul class="app-swiper__info">
-                <li
-                        v-for="item in slide.info"
-                        :key="item"
-                        class="app-swiper__info-item">{{ item }}</li>
-            </ul>
+                    class="app-swiper__bottom-half">
+            </div>
         </div>
 
         <div @click="prevSlide" class="app-swiper__prev">
@@ -159,6 +187,7 @@ const selectSlide = (slideId: number) => {
     width: 100%;
     height: 100%;
     overflow: hidden;
+
     &__switcher {
         position: relative;
         z-index: 20;
@@ -169,6 +198,7 @@ const selectSlide = (slideId: number) => {
         margin: 20px auto 0 auto;
         color: var(--text-color);
         font-size: 18px;
+
         &-item {
             transition: 0.8s background-color ease;
             display: flex;
@@ -181,15 +211,18 @@ const selectSlide = (slideId: number) => {
             cursor: pointer;
             opacity: 0.5;
             box-sizing: border-box;
+
             &_active {
                 opacity: 1;
                 border: solid 0.8px var(--main-color);
             }
+
             &:hover {
                 border: solid 0.8px var(--main-color);
             }
         }
     }
+
     &__prev,
     &__next {
         position: absolute;
@@ -224,18 +257,21 @@ const selectSlide = (slideId: number) => {
     }
 
     &__top-half {
+        left: 0;
+        top: 0;
         width: 100%;
         height: 50%;
-        position: relative;
+        position: absolute;
         background-color: #33b3c7;
         z-index: -1;
     }
 
     &__bottom-half {
-        transform: matrix(1, 0, 0, 1, 0, 0);
+        left: 0;
+        bottom: 0;
         width: 100%;
         height: 50%;
-        position: relative;
+        position: absolute;
         background-color: #025764;
         z-index: -1;
     }
@@ -293,15 +329,73 @@ const selectSlide = (slideId: number) => {
         position: absolute;
         top: 0;
         left: 0;
+        opacity: 0;
+
+        &-wrapper {
+            height: 100%;
+        }
 
         &_active {
             opacity: 1;
+            //transition: opacity 0.5s;
         }
 
-        &_inactive {
-            opacity: 0;
+        &_hide-current {
+            opacity: 1;
+            //.app-swiper__content-wrapper,
+            //.app-swiper__visual,
+            //.app-swiper__info {
+            //    opacity: 0;
+            //    transition: opacity 2s;
+            //}
+            .app-swiper__item-wrapper {
+                transition: opacity 0.5s;
+                opacity: 0;
+            }
+
+
+        }
+
+        &_show-next {
+            z-index: -2;
+            opacity: 1;
+            //transition: opacity 0.5s;
+
+            .app-swiper__item-wrapper {
+                opacity: 0;
+            }
+
+
+        }
+
+        &_animate-current {
+            .app-swiper__top-half {
+                animation: slide-out 1s 0.5s ease-in forwards;
+            }
+
+            .app-swiper__bottom-half {
+                animation: slide-out 1s ease-in forwards;
+            }
+        }
+
+        &_animate-next {
+            .app-swiper__top-half {
+                animation: slide-in 1s 0.5s ease-in forwards;
+                opacity: 1;
+            }
+
+            .app-swiper__bottom-half {
+                animation: slide-in 1s ease-in forwards;
+            }
+        }
+
+        &_animate-slide-content {
+            .app-swiper__item-wrapper {
+                animation: slide-content-animate 0.8s ease;
+            }
         }
     }
+
 
     &__visual {
         position: absolute;
@@ -331,11 +425,42 @@ const selectSlide = (slideId: number) => {
         flex-direction: column;
         //row-gap: 50px;
         color: var(--text-color-secondary);
+
         &-item {
             font-size: 14px;
             line-height: 20px;
             text-transform: uppercase;
         }
+    }
+}
+
+
+@keyframes slide-out {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes slide-in {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-content-animate {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -346,22 +471,27 @@ const selectSlide = (slideId: number) => {
             line-height: 40px;
             letter-spacing: 10px;
         }
+
         &__description {
             font-size: 12px;
             line-height: 16px;
             max-width: 300px;
         }
+
         &__content-wrapper {
             top: calc(50% - 20px);
             height: calc(50% + 20px);
         }
+
         &__btn {
             height: 40px;
             width: 170px;
         }
+
         &__visual {
             min-height: 250px;
         }
+
         &__info {
             display: none;
         }
@@ -375,22 +505,27 @@ const selectSlide = (slideId: number) => {
             line-height: 50px;
             letter-spacing: 13px;
         }
+
         &__description {
             font-size: 14px;
             line-height: 16px;
             max-width: 300px;
         }
+
         &__content-wrapper {
             top: calc(50% - 25px);
             height: calc(50% + 25px);
         }
+
         &__btn {
             height: 50px;
             width: 200px;
         }
+
         &__visual {
             min-height: 250px;
         }
+
         &__info {
             display: none;
         }
