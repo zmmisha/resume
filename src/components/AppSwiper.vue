@@ -70,31 +70,40 @@ const slides = [
 ];
 
 const currentSlide = ref<number>(1);
+const isAnimating = ref<boolean>(false);
 
 const nextSlide = () => {
+    if (isAnimating.value) return;
     const currentIndex = currentSlide.value;
     const nextIndex = currentIndex === slides.length ? 1 : currentIndex + 1;
-    animateSlideChange(nextIndex);
+    animateSlideChangeNext(nextIndex);
 };
 
 const prevSlide = () => {
+    if (isAnimating.value) return;
     const currentIndex = currentSlide.value;
     const prevIndex = currentIndex === 1 ? slides.length : currentIndex - 1;
-    animateSlideChange(prevIndex);
+    animateSlideChangePrev(prevIndex);
 };
 
 const selectSlide = (slideId: number) => {
-    currentSlide.value = slideId
+    if (isAnimating.value) return;
+    if (currentSlide.value > slideId) {
+        animateSlideChangePrev(slideId);
+    } else {
+        animateSlideChangeNext(slideId);
+    }
 }
 
-const animateSlideChange = (newSlideId: number) => {
+const animateSlideChangePrev = (newSlideId: number) => {
+    isAnimating.value = true;
     const currentSlideElement = document.querySelector('.app-swiper__item_active');
     const newSlideElement = document.querySelector(`.app-swiper__item:nth-child(${newSlideId})`);
 
     if (currentSlideElement && newSlideElement) {
         // currentSlideElement.classList.remove('app-swiper__item_active');
-        currentSlideElement.classList.add('app-swiper__item_animate-current');
-        newSlideElement.classList.add('app-swiper__item_animate-next');
+        currentSlideElement.classList.add('app-swiper__item_animate-current-left');
+        newSlideElement.classList.add('app-swiper__item_animate-next-left');
 
         currentSlideElement.classList.add('app-swiper__item_hide-current');
         newSlideElement.classList.add('app-swiper__item_show-next');
@@ -110,6 +119,37 @@ const animateSlideChange = (newSlideId: number) => {
             newSlideElement.classList.add('app-swiper__item_animate-slide-content');
             setTimeout(() => {
                 currentSlide.value = newSlideId;
+                isAnimating.value = false;
+            }, 800);
+        }, 1500); // Длительность анимации
+    }
+};
+
+const animateSlideChangeNext = (newSlideId: number) => {
+    isAnimating.value = true;
+    const currentSlideElement = document.querySelector('.app-swiper__item_active');
+    const newSlideElement = document.querySelector(`.app-swiper__item:nth-child(${newSlideId})`);
+
+    if (currentSlideElement && newSlideElement) {
+        // currentSlideElement.classList.remove('app-swiper__item_active');
+        currentSlideElement.classList.add('app-swiper__item_animate-current-right');
+        newSlideElement.classList.add('app-swiper__item_animate-next-right');
+
+        currentSlideElement.classList.add('app-swiper__item_hide-current');
+        newSlideElement.classList.add('app-swiper__item_show-next');
+
+
+        setTimeout(() => {
+            currentSlideElement.classList.remove('app-swiper__item_active');
+            currentSlideElement.classList.remove('app-swiper__item_hide-current');
+            newSlideElement.classList.remove('app-swiper__item_show-next');
+            currentSlideElement.classList.remove('app-swiper__item_animate-current');
+            newSlideElement.classList.remove('app-swiper__item_animate-next');
+            newSlideElement.classList.add('app-swiper__item_active');
+            newSlideElement.classList.add('app-swiper__item_animate-slide-content');
+            setTimeout(() => {
+                currentSlide.value = newSlideId;
+                isAnimating.value = false;
             }, 800);
         }, 1500); // Длительность анимации
     }
@@ -262,7 +302,6 @@ const animateSlideChange = (newSlideId: number) => {
         width: 100%;
         height: 50%;
         position: absolute;
-        background-color: #33b3c7;
         z-index: -1;
     }
 
@@ -272,7 +311,6 @@ const animateSlideChange = (newSlideId: number) => {
         width: 100%;
         height: 50%;
         position: absolute;
-        background-color: #025764;
         z-index: -1;
     }
 
@@ -368,24 +406,45 @@ const animateSlideChange = (newSlideId: number) => {
 
         }
 
-        &_animate-current {
+        &_animate-current-left {
             .app-swiper__top-half {
-                animation: slide-out 1s 0.5s ease-in forwards;
+                animation: slide-out-left 1s 0.5s ease-in forwards;
             }
 
             .app-swiper__bottom-half {
-                animation: slide-out 1s ease-in forwards;
+                animation: slide-out-left 1s ease-in forwards;
             }
         }
 
-        &_animate-next {
+        &_animate-next-left {
             .app-swiper__top-half {
-                animation: slide-in 1s 0.5s ease-in forwards;
+                animation: slide-in-left 1s 0.5s ease-in forwards;
                 opacity: 1;
             }
 
             .app-swiper__bottom-half {
-                animation: slide-in 1s ease-in forwards;
+                animation: slide-in-left 1s ease-in forwards;
+            }
+        }
+
+        &_animate-current-right {
+            .app-swiper__top-half {
+                animation: slide-out-right 1s 0.5s ease-in forwards;
+            }
+
+            .app-swiper__bottom-half {
+                animation: slide-out-right 1s ease-in forwards;
+            }
+        }
+
+        &_animate-next-right {
+            .app-swiper__top-half {
+                animation: slide-in-right 1s 0.5s ease-in forwards;
+                opacity: 1;
+            }
+
+            .app-swiper__bottom-half {
+                animation: slide-in-right 1s ease-in forwards;
             }
         }
 
@@ -435,7 +494,7 @@ const animateSlideChange = (newSlideId: number) => {
 }
 
 
-@keyframes slide-out {
+@keyframes slide-out-left {
     0% {
         transform: translateX(0);
     }
@@ -444,9 +503,27 @@ const animateSlideChange = (newSlideId: number) => {
     }
 }
 
-@keyframes slide-in {
+@keyframes slide-in-left {
     0% {
         transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-out-right {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes slide-in-right {
+    0% {
+        transform: translateX(-100%);
     }
     100% {
         transform: translateX(0);
