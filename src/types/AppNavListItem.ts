@@ -1,0 +1,1 @@
+export type AppNavListItem = 'home' | 'about' | 'projects' | 'contact'

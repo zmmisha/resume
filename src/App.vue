@@ -1,30 +1,69 @@
+<script setup lang="ts">
+// import { onMounted } from 'vue'
+// import { useRoute } from 'vue-router'
+// import { useI18n } from 'vue-i18n'
+// import { useThemeLocaleData } from './composables/index.js'
+
+
+import AppHeader from "@/components/AppHeader.vue";
+import AppFooter from "@/components/AppFooter.vue";
+// import {onMounted, Ref, ref} from "vue";
+// import {useRouter} from "vue-router";
+// import AppLoadingAnimation from "@/components/AppLoadingAnimation.vue";
+
+// const router = useRouter();
+// const isLoading: Ref<boolean> = ref(false);
+//
+// onMounted(() => {
+//     router.beforeEach((to, from, next) => {
+//         isLoading.value = true;
+//         setTimeout(() => {
+//             isLoading.value = false;
+//             next();
+//         }, 1000); // 3 секунды
+//     });
+// });
+</script>
+
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+    <div class="view-container">
+        <AppHeader/>
+        <router-view></router-view>
+        <AppFooter/>
+<!--        <AppLoadingAnimation v-if="isLoading"/>-->
+    </div>
+
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<style lang="scss">
+.view-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--bg-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: -10;
+    transition: all 0.5s ease;
+}
+@media (max-width: 481px) {
+    .view-container {
+        border: 8px solid rgba(98, 98, 98, 0.08);
+        border-top: none;
+    }
 }
 
-nav {
-  padding: 30px;
+@media (min-width: 481px) and (max-width: 769px) {
+    .view-container {
+        border: 8px solid rgba(98, 98, 98, 0.08);
+        border-top: none;
+    }
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+@media (min-width: 769px) and (max-width: 1024px) {
 
-nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>

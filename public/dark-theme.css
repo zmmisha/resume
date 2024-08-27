@@ -1,0 +1,36 @@
+[data-theme="dark"] {
+    --bg-color: #1c1e21;
+    --text-color: #ffffff;
+    --main-color: #b37f43;
+    --switch-color: rgb(26, 26, 26);
+    --switch-bg-color: rgb(47, 47, 47);
+    --visual-color: #b37f43;
+    --text-color-secondary: #9f9f9f;
+
+    --btn-text-color: #f8f8f8;
+    --btn-bg-color: #b37f43;
+    --btn-hover-text-color: #b37f43;
+    --btn-hover-bg-color: #f8f8f8;
+
+    --swiper-switcher-bg-color: rgba(89, 89, 89, 0.1);
+
+    --p1-bg-top-color: #6068bb;
+    --p1-bg-bottom-color: #282d5e;
+    --p1-img-color: rgba(110, 93, 147, 0.5);
+
+    --p2-bg-top-color: #430072;
+    --p2-bg-bottom-color: #340054;
+    --p2-img-color: rgb(101, 92, 69);
+
+    --p3-bg-top-color: #3a3a3a;
+    --p3-bg-bottom-color: #232222;
+    --p3-img-color: rgba(110, 93, 147, 0.5);
+
+    --p4-bg-top-color: #430302;
+    --p4-bg-bottom-color: #220403;
+    --p4-img-color: rgba(110, 93, 147, 0.5);
+
+    --p5-bg-top-color: #043F5D;
+    --p5-bg-bottom-color: #053954;
+    --p5-img-color: rgba(110, 93, 147, 0.5);
+}

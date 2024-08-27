@@ -1,0 +1,1 @@
+export type AppHomeListLink = 'ABOUT ME' | 'MY PROJECTS'

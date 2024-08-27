@@ -1,0 +1,1 @@
+export type AppSwitchMode = 'light' | 'dark'
