@@ -1,11 +1,14 @@
 [data-theme="light"] {
     --bg-color: #f8f8f8;
+    --bg-color-dialog: rgba(232, 231, 231, 1);
     --text-color: #000000;
     --main-color: #b37f43;
+    --main-color-hover: #d5b788;
     --switch-color: rgb(255, 255, 255);
     --switch-bg-color: rgb(241, 241, 241);
     --visual-color: #b37f43;
     --text-color-secondary: #606569;
+    --nav-item-color: rgb(134, 130, 130);
 
     --btn-text-color: #1c1e21;
     --btn-bg-color: #b37f43;

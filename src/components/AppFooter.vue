@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import {useI18n} from 'vue-i18n';
 
+const {t} = useI18n();
 
 </script>
 
 <template>
     <footer class="app-footer">
-        <span class="app-footer__text">©2024 Kotlyarov Mikhail | All rights reserved</span>
+        <span v-html="t('footerRights')" class="app-footer__text"></span>
     </footer>
 
 </template>

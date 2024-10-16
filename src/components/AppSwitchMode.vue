@@ -64,7 +64,7 @@ const computedClassMode = computed(() => {
         cursor: pointer;
         transition: 0.3s all;
         &:hover {
-            border-color: #d5b788;
+            border-color: var(--main-color-hover);
             transform: scale(1.03);
         }
     }

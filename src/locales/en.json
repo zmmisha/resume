@@ -1,0 +1,27 @@
+{
+  "home": "Home",
+  "about": "About",
+  "projects": "Projects",
+  "contact": "Contact",
+  "title": "Kotlyaroff",
+
+  "developer": "Kotlyarov Mikhail",
+  "developerDescription": "Front end developer",
+
+  "homeBtnAbout": "About me",
+  "homeBtnProjects": "My projects",
+
+  "footerRights": "©2024 Kotlyarov Mikhail &#124; All rights reserved",
+
+  "projectView": "View project",
+  "gallows": "Gallows",
+  "gallowsDescription": "On the occasion of the evolution of its services, Airfrance organized an exhibition to allow travelers to discover all their latest services. In this exhibition, visitors could use an iOS application to discover additional content and attempt to win airplane tickets.",
+  "todos": "Todos",
+  "todosDescription": "For the reopening of the National Museum Picasso Paris, the museum team organized a competition to create an iOS application to showcase the universe of the artist Picasso and encourage visitors to come and discover the new exhibition in the museum.",
+  "toolyards": "Toolyard",
+  "toolyardsDescription": "Omnisense is an interactive experience which combines a smartphone and a desktop. The goal of the project is to make you think about the different uses of social data.",
+  "mainCraft": "MainCraft",
+  "mainCraftDescription": "Omnisense is an interactive experience which combines a smartphone and a desktop. The goal of the project is to make you think about the different uses of social data.",
+  "world": "World",
+  "worldDescription": "Omnisense is an interactive experience which combines a smartphone and a desktop. The goal of the project is to make you think about the different uses of social data."
+}

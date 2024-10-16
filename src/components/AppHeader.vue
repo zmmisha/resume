@@ -1,9 +1,13 @@
 <script setup lang="ts">
 
 import {AppNavListItem} from "@/types/AppNavListItem";
-// import {useRouter} from "vue-router";
 import AppSwitchMode from "@/components/AppSwitchMode.vue";
 import {Ref, ref} from "vue";
+import {useI18n} from "vue-i18n";
+import router from "@/router";
+import AppSwitchLanguage from "@/components/AppSwitchLanguage.vue";
+
+const {t} = useI18n();
 
 const navList: AppNavListItem[] = ['home', 'about', 'projects', 'contact']
 // const router = useRouter()
@@ -12,14 +16,18 @@ const isMenuOpen: Ref<boolean> = ref(false)
 const toggleMenu = () => {
     isMenuOpen.value = !isMenuOpen.value
 }
+
+const goToHome = () => {
+    router.push('/home')
+}
 </script>
 
 <template>
     <header :class="{'app-header_toggle-menu': isMenuOpen}" class="app-header">
-    <span class="app-header__logo"><svg width="220" height="50" xmlns="http://www.w3.org/2000/svg">
+    <span @click="goToHome" class="app-header__logo"><svg width="220" height="50" xmlns="http://www.w3.org/2000/svg">
         <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="ISOCPEUR, cursive"
-              fill="#b37f43" font-style="normal" font-weight="bold" letter-spacing="-1">
-            KOTLYAROFF
+              fill="#b37f43" font-style="normal" font-weight="700" letter-spacing="1">
+            {{ t('title') }}
         </text>
     </svg></span>
 
@@ -37,11 +45,13 @@ const toggleMenu = () => {
                                 :to="`/${item}`"
                                 active-class="app-header__nav-item_active"
                         >
-                            {{ item }}
+                            {{ t(item) }}
                         </router-link>
                     </li>
                 </ul>
             </nav>
+
+            <AppSwitchLanguage/>
 
             <AppSwitchMode/>
 
@@ -67,23 +77,28 @@ a {
 }
 
 .app-header {
+    //position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 50px;
     padding: 10px;
-    z-index: 4;
+    z-index: 21;
 
     &__hamburger {
         display: none;
     }
 
     &__logo {
-        font-size: 30px;
-        text-transform: uppercase;
-        color: #b37f43;
+        font-size: 40px;
+        //text-transform: uppercase;
+        color: var(--main-color);
         display: flex;
         align-items: center;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     &__right {
@@ -105,13 +120,11 @@ a {
         }
 
         &-item {
-
-
-            color: rgb(134, 130, 130);
+            color: var(--nav-item-color);
             margin-right: 15px;
             font-size: 13px;
             text-transform: uppercase;
-            transition: 0.5s all;
+            transition: 0.5s transform, 0.5s color;
             position: relative;
 
             &:after {
@@ -120,7 +133,7 @@ a {
                 justify-content: center;
                 width: 0;
                 height: 1.5px;
-                background-color: #b37f43;
+                background-color: var(--main-color);
                 margin-top: 2px;
                 position: absolute;
                 left: 50%;
@@ -130,13 +143,13 @@ a {
 
             &:hover {
                 transform: scale(1.1);
-                color: #b37f43;
+                color: var(--main-color);
                 &:after {
                     width: 100%;
                 }
             }
             &_active {
-                color: #b37f43;
+                color: var(--main-color);
 
                 &:after {
                     content: '';
@@ -144,12 +157,9 @@ a {
                     justify-content: center;
                     width: 100%;
                     height: 1.5px;
-                    background-color: #b37f43;
+                    background-color: var(--main-color);
                     margin-top: 2px;
                     position: absolute;
-                    //left: 50%;
-                    //transform: translateX(-50%);
-                    //transition: width 0.5s ease, transform 0.5s ease;
                 }
             }
         }
@@ -171,7 +181,7 @@ a {
             width: 24px;
             height: 18px;
             cursor: pointer;
-            margin-left: 15px;
+            margin-left: 10px;
 
             & span {
                 transition: 0.5s all;
@@ -209,7 +219,7 @@ a {
 
         &__logo {
             & svg {
-                width: 150px;
+                width: 120px;
                 font-size: 24px;
             }
         }
@@ -223,7 +233,6 @@ a {
                 display: flex;
                 transition: opacity 1s ease 1s; // Задержка в 1 секунду
                 opacity: 1;
-                //visibility: hidden;
                 position: absolute;
                 top: 0;
                 left: 0;

@@ -1,21 +1,30 @@
 <script setup lang="ts">
 
 import AppButton from "@/components/AppButton.vue";
-import {AppHomeListLink} from "@/types/AppHomeListLink";
+// import {AppHomeListLink} from "@/types/AppHomeListLink";
+import {useI18n} from "vue-i18n";
+import router from "@/router";
 
-const listLink: AppHomeListLink[] = ['ABOUT ME', 'MY PROJECTS']
+const {t} = useI18n();
+
+const listLink: {label: string, route: string}[] = [{label: 'homeBtnAbout', route: '/about'}, {label:
+            'homeBtnProjects', route: '/projects'}];
+
+const navigateTo = (route: string) => {
+    router.push(route)
+}
 </script>
 
 <template>
     <div class="home__wrapper">
         <div class="home__welcome-text">
-            <h1>Kotlyarov Mikhail</h1>
-            <h2>Front end developer</h2>
+            <h1>{{ t('developer') }}</h1>
+            <h2>{{ t('developerDescription') }}</h2>
         </div>
 
         <ul class="home__list-link">
             <li v-for="item in listLink" :key="item">
-                <AppButton class="home__btn">{{ item }}</AppButton>
+                <AppButton @click="navigateTo(item.route)" class="home__btn">{{ t(item.label) }}</AppButton>
             </li>
         </ul>
     </div>
@@ -74,6 +83,7 @@ const listLink: AppHomeListLink[] = ['ABOUT ME', 'MY PROJECTS']
         width: 200px;
         height: 65px;
         font-size: 18px;
+        text-transform: uppercase;
     }
 
     &__welcome-text {
@@ -107,6 +117,7 @@ const listLink: AppHomeListLink[] = ['ABOUT ME', 'MY PROJECTS']
             font-size: 32px;
             line-height: 40px;
         }
+
         &__btn {
             width: 140px;
             height: 50px;
@@ -121,6 +132,7 @@ const listLink: AppHomeListLink[] = ['ABOUT ME', 'MY PROJECTS']
             font-size: 32px;
             line-height: 40px;
         }
+
         &__btn {
             width: 140px;
             height: 50px;

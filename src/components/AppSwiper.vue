@@ -1,17 +1,20 @@
 <script setup lang="ts">
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
+import {useI18n} from 'vue-i18n';
 import AppButton from "@/components/AppButton.vue";
 import SvgGallows from "@/assets/svg/SvgGallows.vue";
 import SvgTodos from "@/assets/svg/SvgTodos.vue";
 import SvgArrow from "@/assets/svg/SvgArrow.vue";
 import SvgToolyard from "@/assets/svg/SvgToolyard.vue";
 
+const {t} = useI18n();
+
 const slides = [
     {
         id: 1,
         image: SvgGallows,
         title: 'gallows',
-        description: 'On the occasion of the evolution of its services , Airfrance organized an exhibition to allow travelers to discover all their lastest services. In this exhibition, visitors could use an iOS application to discover additional content and attempt to win airplane tickets.',
+        description: 'todosDescription',
         info: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'Vue', 'Vite', 'Bootstrap', 'Tailwind', 'Figma'],
         link: 'https://github.com/kotlyarovmik/gallows',
         bgcTop: 'var(--p1-bg-top-color)',
@@ -22,9 +25,8 @@ const slides = [
     {
         id: 2,
         image: SvgTodos,
-        title: 'Todos',
-        description:
-                'For the reopening of the National Museum Picasso Paris, the museum team organized a competition to create an iOS application to showcase the univers of the artist Picasso and encourage visitors to come and discover the new exhibition in the museum.',
+        title: 'todos',
+        description: 'todosDescription',
         info: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'Vue', 'Vite', 'Bootstrap', 'Tailwind', 'Figma'],
         link: 'https://github.com/kotlyarovmik/gallows',
         bgcTop: 'var(--p2-bg-top-color)',
@@ -34,9 +36,8 @@ const slides = [
     {
         id: 3,
         image: SvgToolyard,
-        title: 'Toolyard',
-        description:
-                'Omnisense is an interactive experience which combines a smartphone and a desktop. The goal of the project is to make you think about the different uses of social data. ',
+        title: 'toolyards',
+        description: 'toolyardsDescription',
         info: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'Vue', 'Vite', 'Bootstrap', 'Tailwind', 'Figma'],
         link: 'https://github.com/kotlyarovmik/gallows',
         bgcTop: 'var(--p3-bg-top-color)',
@@ -46,9 +47,8 @@ const slides = [
     {
         id: 4,
         image: SvgToolyard,
-        title: 'MainCraft',
-        description:
-                'Omnisense is an interactive experience which combines a smartphone and a desktop. The goal of the project is to make you think about the different uses of social data. ',
+        title: 'mainCraft',
+        description: 'mainCraftDescription',
         info: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'Vue', 'Vite', 'Bootstrap', 'Tailwind', 'Figma'],
         link: 'https://github.com/kotlyarovmik/gallows',
         bgcTop: 'var(--p4-bg-top-color)',
@@ -58,9 +58,8 @@ const slides = [
     {
         id: 5,
         image: SvgToolyard,
-        title: 'World',
-        description:
-                'Omnisense is an interactive experience which combines a smartphone and a desktop. The goal of the project is to make you think about the different uses of social data. ',
+        title: 'world',
+        description: 'worldDescription',
         info: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'Vue', 'Vite', 'Bootstrap', 'Tailwind', 'Figma'],
         link: 'https://github.com/kotlyarovmik/gallows',
         bgcTop: 'var(--p5-bg-top-color)',
@@ -70,51 +69,45 @@ const slides = [
 ];
 
 const currentSlide = ref<number>(1);
+const currentTabSlide = ref<number>(currentSlide.value);
 const isAnimating = ref<boolean>(false);
 
 const nextSlide = () => {
     if (isAnimating.value) return;
     const currentIndex = currentSlide.value;
     const nextIndex = currentIndex === slides.length ? 1 : currentIndex + 1;
-    animateSlideChangeNext(nextIndex);
+    animateSlideChange(nextIndex, 'right');
 };
 
 const prevSlide = () => {
     if (isAnimating.value) return;
     const currentIndex = currentSlide.value;
     const prevIndex = currentIndex === 1 ? slides.length : currentIndex - 1;
-    animateSlideChangePrev(prevIndex);
+    animateSlideChange(prevIndex, 'left');
 };
 
 const selectSlide = (slideId: number) => {
-    if (isAnimating.value) return;
-    if (currentSlide.value > slideId) {
-        animateSlideChangePrev(slideId);
-    } else {
-        animateSlideChangeNext(slideId);
-    }
-}
+    if (isAnimating.value || slideId === currentSlide.value) return;
+    const direction = slideId > currentSlide.value ? 'right' : 'left';
+    animateSlideChange(slideId, direction);
+};
 
-const animateSlideChangePrev = (newSlideId: number) => {
+const animateSlideChange = (newSlideId: number, direction: 'left' | 'right') => {
     isAnimating.value = true;
+    currentTabSlide.value = newSlideId;
     const currentSlideElement = document.querySelector('.app-swiper__item_active');
     const newSlideElement = document.querySelector(`.app-swiper__item:nth-child(${newSlideId})`);
 
     if (currentSlideElement && newSlideElement) {
-        // currentSlideElement.classList.remove('app-swiper__item_active');
-        currentSlideElement.classList.add('app-swiper__item_animate-current-left');
-        newSlideElement.classList.add('app-swiper__item_animate-next-left');
-
+        currentSlideElement.classList.add(`app-swiper__item_animate-current-${direction}`);
+        newSlideElement.classList.add(`app-swiper__item_animate-next-${direction}`);
         currentSlideElement.classList.add('app-swiper__item_hide-current');
         newSlideElement.classList.add('app-swiper__item_show-next');
-
 
         setTimeout(() => {
             currentSlideElement.classList.remove('app-swiper__item_active');
             currentSlideElement.classList.remove('app-swiper__item_hide-current');
             newSlideElement.classList.remove('app-swiper__item_show-next');
-            currentSlideElement.classList.remove('app-swiper__item_animate-current');
-            newSlideElement.classList.remove('app-swiper__item_animate-next');
             newSlideElement.classList.add('app-swiper__item_active');
             newSlideElement.classList.add('app-swiper__item_animate-slide-content');
             setTimeout(() => {
@@ -125,35 +118,29 @@ const animateSlideChangePrev = (newSlideId: number) => {
     }
 };
 
-const animateSlideChangeNext = (newSlideId: number) => {
+const animateFirstSlide = (direction: 'left' | 'right') => {
     isAnimating.value = true;
     const currentSlideElement = document.querySelector('.app-swiper__item_active');
-    const newSlideElement = document.querySelector(`.app-swiper__item:nth-child(${newSlideId})`);
 
-    if (currentSlideElement && newSlideElement) {
-        // currentSlideElement.classList.remove('app-swiper__item_active');
-        currentSlideElement.classList.add('app-swiper__item_animate-current-right');
-        newSlideElement.classList.add('app-swiper__item_animate-next-right');
-
-        currentSlideElement.classList.add('app-swiper__item_hide-current');
-        newSlideElement.classList.add('app-swiper__item_show-next');
-
+    if (currentSlideElement) {
+        currentSlideElement.classList.add(`app-swiper__item_animate-next-${direction}`);
+        currentSlideElement.classList.add('app-swiper__item_hide-first');
 
         setTimeout(() => {
-            currentSlideElement.classList.remove('app-swiper__item_active');
-            currentSlideElement.classList.remove('app-swiper__item_hide-current');
-            newSlideElement.classList.remove('app-swiper__item_show-next');
-            currentSlideElement.classList.remove('app-swiper__item_animate-current');
-            newSlideElement.classList.remove('app-swiper__item_animate-next');
-            newSlideElement.classList.add('app-swiper__item_active');
-            newSlideElement.classList.add('app-swiper__item_animate-slide-content');
+            currentSlideElement.classList.remove('app-swiper__item_hide-first');
+            currentSlideElement.classList.remove(`app-swiper__item_animate-next-${direction}`);
+            currentSlideElement.classList.add('app-swiper__item_animate-slide-content');
             setTimeout(() => {
-                currentSlide.value = newSlideId;
                 isAnimating.value = false;
+                currentSlideElement.classList.remove('app-swiper__item_animate-slide-content');
             }, 800);
         }, 1500); // Длительность анимации
     }
 };
+
+onMounted(() => {
+    animateFirstSlide('left');
+})
 </script>
 
 <template>
@@ -181,9 +168,9 @@ const animateSlideChangeNext = (newSlideId: number) => {
                 </div>
 
                 <div class="app-swiper__content-wrapper">
-                    <p class="app-swiper__title">{{ slide.title }}</p>
-                    <p class="app-swiper__description">{{ slide.description }}</p>
-                    <AppButton class="app-swiper__btn">View Project</AppButton>
+                    <p class="app-swiper__title">{{ t(slide.title) }}</p>
+                    <p class="app-swiper__description">{{ t(slide.description) }}</p>
+                    <AppButton class="app-swiper__btn">{{ t('projectView') }}</AppButton>
                 </div>
 
                 <ul class="app-swiper__info">
@@ -213,7 +200,7 @@ const animateSlideChangeNext = (newSlideId: number) => {
                     v-for="slide in slides"
                     :key="slide.id"
                     class="app-swiper__switcher-item"
-                    :class="{ 'app-swiper__switcher-item_active': slide.id === currentSlide}"
+                    :class="{ 'app-swiper__switcher-item_active': slide.id === currentTabSlide}"
                     @click="selectSlide(slide.id)"
             >
                 {{ slide.id }}
@@ -230,7 +217,7 @@ const animateSlideChangeNext = (newSlideId: number) => {
 
     &__switcher {
         position: relative;
-        z-index: 20;
+        z-index: 4;
         width: 60%;
         display: flex;
         align-items: center;
@@ -240,7 +227,7 @@ const animateSlideChangeNext = (newSlideId: number) => {
         font-size: 18px;
 
         &-item {
-            transition: 0.8s background-color ease;
+            transition: 0.4s border ease, 0.4s transform ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -257,8 +244,10 @@ const animateSlideChangeNext = (newSlideId: number) => {
                 border: solid 0.8px var(--main-color);
             }
 
-            &:hover {
+            &:not(&_active):hover {
+                opacity: 0.8;
                 border: solid 0.8px var(--main-color);
+                transform: scale(1.03);
             }
         }
     }
@@ -273,6 +262,13 @@ const animateSlideChangeNext = (newSlideId: number) => {
         z-index: 20;
         cursor: pointer;
         fill: var(--main-color);
+        opacity: 0.6;
+        transition: scale 0.4s ease;
+
+        &:hover {
+            scale: 1.05;
+            opacity: 1;
+        }
     }
 
     &__prev {
@@ -303,6 +299,7 @@ const animateSlideChangeNext = (newSlideId: number) => {
         height: 50%;
         position: absolute;
         z-index: -1;
+        transition: background-color 0.4s ease;
     }
 
     &__bottom-half {
@@ -312,27 +309,20 @@ const animateSlideChangeNext = (newSlideId: number) => {
         height: 50%;
         position: absolute;
         z-index: -1;
+        transition: background-color 0.4s ease;
     }
 
     &__title {
-        //position: absolute;
-        //top: 50%;
-        //left: 50%;
-        //transform: translate(-50%, -50%);
-
         font-size: 60px;
         font-weight: 700;
         color: var(--text-color);
         letter-spacing: 30px;
         text-align: center;
         text-transform: uppercase;
+        z-index: 1;
     }
 
     &__description {
-        //position: absolute;
-        //top: 50%;
-        //left: 50%;
-        //transform: translate(-50%, -50%);
         color: var(--text-color);
         font-size: 16px;
         max-width: 400px;
@@ -340,6 +330,7 @@ const animateSlideChangeNext = (newSlideId: number) => {
         margin-top: 20px;
         line-height: 20px;
         text-align: justify;
+        z-index: 1;
     }
 
     &__btn {
@@ -347,17 +338,13 @@ const animateSlideChangeNext = (newSlideId: number) => {
         bottom: 10%;
         left: 50%;
         transform: translate(-50%, -50%);
-
         width: 200px;
         height: 55px;
         font-size: 18px;
         text-transform: uppercase;
         letter-spacing: 3px;
         font-weight: 700;
-        //margin-top: 40px;
         z-index: 4;
-        //border: 1px solid rgba(255, 255, 255, 0.15);
-        //background-color: rgba(255, 255, 255, 0.15);
     }
 
     &__item {
@@ -375,35 +362,30 @@ const animateSlideChangeNext = (newSlideId: number) => {
 
         &_active {
             opacity: 1;
-            //transition: opacity 0.5s;
         }
 
         &_hide-current {
             opacity: 1;
-            //.app-swiper__content-wrapper,
-            //.app-swiper__visual,
-            //.app-swiper__info {
-            //    opacity: 0;
-            //    transition: opacity 2s;
-            //}
             .app-swiper__item-wrapper {
                 transition: opacity 0.5s;
                 opacity: 0;
             }
-
-
         }
 
         &_show-next {
             z-index: -2;
             opacity: 1;
-            //transition: opacity 0.5s;
+            .app-swiper__item-wrapper {
+                opacity: 0;
+            }
+        }
+
+        &_hide-first {
+            opacity: 1;
 
             .app-swiper__item-wrapper {
                 opacity: 0;
             }
-
-
         }
 
         &_animate-current-left {
@@ -471,7 +453,6 @@ const animateSlideChangeNext = (newSlideId: number) => {
         width: 100%;
         height: 100%;
         object-fit: contain;
-        //fill: var(--p1-img-color);
         opacity: 0.7;
     }
 
@@ -482,8 +463,8 @@ const animateSlideChangeNext = (newSlideId: number) => {
         display: flex;
         justify-content: space-between;
         flex-direction: column;
-        //row-gap: 50px;
         color: var(--text-color-secondary);
+        z-index: 1;
 
         &-item {
             font-size: 14px;

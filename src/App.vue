@@ -1,28 +1,6 @@
 <script setup lang="ts">
-// import { onMounted } from 'vue'
-// import { useRoute } from 'vue-router'
-// import { useI18n } from 'vue-i18n'
-// import { useThemeLocaleData } from './composables/index.js'
-
-
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
-// import {onMounted, Ref, ref} from "vue";
-// import {useRouter} from "vue-router";
-// import AppLoadingAnimation from "@/components/AppLoadingAnimation.vue";
-
-// const router = useRouter();
-// const isLoading: Ref<boolean> = ref(false);
-//
-// onMounted(() => {
-//     router.beforeEach((to, from, next) => {
-//         isLoading.value = true;
-//         setTimeout(() => {
-//             isLoading.value = false;
-//             next();
-//         }, 1000); // 3 секунды
-//     });
-// });
 </script>
 
 <template>
@@ -30,7 +8,6 @@ import AppFooter from "@/components/AppFooter.vue";
         <AppHeader/>
         <router-view></router-view>
         <AppFooter/>
-<!--        <AppLoadingAnimation v-if="isLoading"/>-->
     </div>
 
 </template>
@@ -47,7 +24,8 @@ import AppFooter from "@/components/AppFooter.vue";
     flex-direction: column;
     justify-content: space-between;
     z-index: -10;
-    transition: all 0.5s ease;
+    transition: background-color 1s ease;
+    overflow: hidden;
 }
 @media (max-width: 481px) {
     .view-container {
