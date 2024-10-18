@@ -1,0 +1,39 @@
+[data-theme="light"] {
+    --bg-color: #f8f8f8;
+    --bg-color-dialog: rgba(232, 231, 231, 1);
+    --text-color: #000000;
+    --main-color: #b37f43;
+    --main-color-hover: #d5b788;
+    --switch-color: rgb(255, 255, 255);
+    --switch-bg-color: rgb(241, 241, 241);
+    --visual-color: #b37f43;
+    --text-color-secondary: #606569;
+    --nav-item-color: rgb(134, 130, 130);
+
+    --btn-text-color: #1c1e21;
+    --btn-bg-color: #b37f43;
+    --btn-hover-text-color: #b37f43;
+    --btn-hover-bg-color: #1c1e21;
+
+    --swiper-switcher-bg-color: rgba(255, 255, 255, 0.1);
+
+    --p1-bg-top-color: #deffca;
+    --p1-bg-bottom-color: #d1f3df;
+    --p1-img-color: rgba(213, 193, 255, 0.5);
+
+    --p2-bg-top-color: #ddbcff;
+    --p2-bg-bottom-color: #d4acfc;
+    --p2-img-color: rgba(253, 234, 234, 0.61);
+
+    --p3-bg-top-color: #e3e2e2;
+    --p3-bg-bottom-color: #d0cfcf;
+    --p3-img-color: rgba(188, 159, 255, 0.5);
+
+    --p4-bg-top-color: #f2e0a4;
+    --p4-bg-bottom-color: #edc676;
+    --p4-img-color: rgba(110, 93, 147, 0.5);
+
+    --p5-bg-top-color: #86E0FC;
+    --p5-bg-bottom-color: #7fd1ef;
+    --p5-img-color: rgba(110, 93, 147, 0.5);
+}
