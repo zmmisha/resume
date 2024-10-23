@@ -1,13 +1,13 @@
 @font-face {
     font-family: 'ISOCPEUR';
-    src: url(@/assets/fonts/ISOCPEUR.ttf) format("truetype");
+    src: url(./fonts/ISOCPEUR.ttf) format("truetype");
     font-weight: 400;
     font-style: normal
 }
 
 @font-face {
     font-family: 'ISOCPEUR';
-    src: url(@/assets/fonts/ISOCPEUR_it.ttf) format("truetype");
+    src: url(./fonts/ISOCPEUR_it.ttf) format("truetype");
     font-weight: 400;
     font-style: italic;
 }
